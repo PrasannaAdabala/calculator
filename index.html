@@ -64,7 +64,20 @@
                 } else if (buttonText === '=') {
                     let result = eval(currentText);
                     geth2.innerHTML = result;
-                } else {
+
+                }
+                else if(buttonText==='mrc'){
+                    geth2.innerHTML =0;
+                }
+                else if(buttonText==='m-'){
+                    let result1=currentText-1
+                    geth2.innerHTML =result1;
+                }
+                else if(buttonText==='m+'){
+                    let result2 = parseFloat(currentText) + 1;
+                    geth2.innerHTML =result2;
+                }
+                 else {
                     geth2.innerHTML += buttonText;
                 }
             });
