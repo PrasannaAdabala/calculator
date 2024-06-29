@@ -3,175 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Calculator</title>
 </head>
 <body>
     <div class="main">
-       
-      <h1 class="c1"></h1>  
-      <button class="c2">mrc</button>  
-      <button class="c3">m-</button>  
-      <button class="c4">m+</button> 
-      <button class="c5">/</button> 
-      <button class="c6">7</button> 
-      <button class="c7">8</button> 
-      <button class="c8">9</button>
-       <button class="c9">*</button> 
-       <button class="c10">4</button> 
-      <button class="c11">5</button> 
-      <button class="c12">6</button>
-    <button class="c13">-</button> 
-      <button class="c14">1</button>
-      <button class="c15">2</button> 
-      <button class="c16">3</button> 
-      <button class="c17">+</button> 
-      <button class="c18">0</button> 
-       <button class="c19">.</button> 
-       <button class="c20">c</button>  
-      <button class="c21">=</button>  
-
-
-
-       
+        <input type="text" class="c1" readonly>
+        <button class="c2">mrc</button>
+        <button class="c3">m-</button>
+        <button class="c4">m+</button>
+        <button class="c5">/</button>
+        <button class="c6">7</button>
+        <button class="c7">8</button>
+        <button class="c8">9</button>
+        <button class="c9">*</button>
+        <button class="c10">4</button>
+        <button class="c11">5</button>
+        <button class="c12">6</button>
+        <button class="c13">-</button>
+        <button class="c14">1</button>
+        <button class="c15">2</button>
+        <button class="c16">3</button>
+        <button class="c17">+</button>
+        <button class="c18">0</button>
+        <button class="c19">.</button>
+        <button class="c20">c</button>
+        <button class="c21">=</button>
     </div>
-    
-    <script>
-      
-        let geth1 = document.getElementsByClassName("main")[0];
-        document.body.style.backgroundColor = "green";
-        geth1.setAttribute("style", "border:2px solid white;border-radius:10px;height:370px; width:350px;margin-left:200px;margin-top:100px;background-color:black");
 
-        let geth2 = document.getElementsByClassName("c1")[0];
-        geth2.setAttribute("style", "border:2px solid white;height:40px;margin-left:20px;margin-right:20px;background-color:palegreen;border-radius:5px");
+    <script>
+        document.body.style.cssText = "display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: green;";
+
+        let mainDiv = document.getElementsByClassName("main")[0];
+        mainDiv.setAttribute("style", "border: 2px solid white; border-radius: 10px; background-color: black; padding: 20px; display: grid; gap: 10px; grid-template-columns: repeat(4, 1fr); width: 100%; max-width: 350px;");
+
+        let display = document.getElementsByClassName("c1")[0];
+        display.setAttribute("style", "border: 2px solid white; height: 40px; background-color: palegreen; border-radius: 5px; text-align: right; padding-right: 10px; grid-column: span 4;");
 
         let buttons = document.querySelectorAll('.main button');
+        buttons.forEach(button => {
+            button.style.cssText = "height: 35px; border: 2px solid white; border-radius: 5px; color: white;";
+            if (['/', '*', '-', '+', '='].includes(button.textContent)) {
+                button.style.backgroundColor = "blue";
+            } else if (['mrc', 'm-', 'm+'].includes(button.textContent)) {
+                button.style.backgroundColor = "red";
+            } else {
+                button.style.cssText += "background-color: white; color: black;";
+            }
+        });
+
+        let memory = 0;
+        let mrcClickedOnce = false;
 
         buttons.forEach(button => {
             button.addEventListener('click', function() {
                 const buttonText = this.textContent;
-                let currentText = geth2.textContent;
+                let currentText = display.value;
 
                 if (buttonText === '/') {
-                    geth2.innerHTML += '/';
+                    display.value += '/';
                 } else if (buttonText === '*') {
-                    geth2.innerHTML += '*';
+                    display.value += '*';
                 } else if (buttonText === '-') {
-                    geth2.innerHTML += '-';
+                    display.value += '-';
                 } else if (buttonText === '+') {
-                    geth2.innerHTML += '+';
+                    display.value += '+';
                 } else if (buttonText === 'c') {
-                    geth2.innerHTML = " ";
+                    display.value = "";
                 } else if (buttonText === '=') {
-                    let result = eval(currentText);
-                    geth2.innerHTML = result;
-
-                }
-                else if(buttonText==='mrc'){
-                    geth2.innerHTML =0;
-                }
-                else if(buttonText==='m-'){
-                    let result1=currentText-1
-                    geth2.innerHTML =result1;
-                }
-                else if(buttonText==='m+'){
-                    let result2 = parseFloat(currentText) + 1;
-                    geth2.innerHTML =result2;
-                }
-                 else {
-                    geth2.innerHTML += buttonText;
+                    try {
+                        let result = eval(currentText);
+                        display.value = result;
+                    } catch (e) {
+                        display.value = "Error";
+                    }
+                } else if (buttonText === 'mrc') {
+                    if (mrcClickedOnce) {
+                        memory = 0;
+                        mrcClickedOnce = false;
+                    } else {
+                        display.value = memory;
+                        mrcClickedOnce = true;
+                    }
+                } else if (buttonText === 'm-') {
+                    memory -= parseFloat(currentText);
+                    display.value = "";
+                } else if (buttonText === 'm+') {
+                    memory += parseFloat(currentText);
+                    display.value = "";
+                } else {
+                    display.value += buttonText;
                 }
             });
         });
-    
-       
-        let geth3=document.getElementsByClassName("c2")[0];
-        geth3.setAttribute("style","border:2px solid white;height:35px;width:60px;margin-left:20px;background-color:red;color:white;border-radius:5px")
-        
-        let geth4=document.getElementsByClassName("c3")[0]
-        geth4.setAttribute("style","border:2px solid white;height:35px;width:60px;margin-left:20px;background-color:red;color:white;border-radius:5px")
 
-        let geth5=document.getElementsByClassName("c4")[0]
-        geth5.setAttribute("style","border:2px solid white;height:35px;width:60px;margin-left:20px;background-color:red;color:white;border-radius:5px")
+        function applyResponsiveStyles() {
+            if (window.innerWidth <= 400) {
+                mainDiv.style.width = "90%";
+                mainDiv.style.maxWidth = "none";
+            } else {
+                mainDiv.style.width = "100%";
+                mainDiv.style.maxWidth = "350px";
+            }
+        }
 
-        let geth6=document.getElementsByClassName("c5")[0]
-        geth6.setAttribute("style","border:2px solid white;height:35px;width:60px;margin-left:20px;background-color:red;color:white;border-radius:5px")
-       
-
-        let geth7=document.getElementsByClassName("c6")[0]
-        geth7.setAttribute("style","border:2px solid white;height:35px;width:60px;margin-left:20px;background-color:white;color:black;margin-top:20px;border-radius:5px")
-       
-
-        let geth8=document.getElementsByClassName("c7")[0]
-        geth8.setAttribute("style","border:2px solid white;height:35px;width:60px;margin-left:20px;background-color:white;color:black;margin-top:20px;border-radius:5px")
-        
-
-
-
-        let geth9=document.getElementsByClassName("c8")[0]
-        geth9.setAttribute("style","border:2px solid white;height:35px;width:60px;margin-left:20px;background-color:white;color:black;margin-top:20px;border-radius:5px")
-        
-
-        let geth10=document.getElementsByClassName("c9")[0]
-        geth10.setAttribute("style","border:2px solid white;height:35px;width:60px;margin-left:20px;background-color:blue;color:white;margin-top:20px;border-radius:5px")
-        
-
-        let geth11=document.getElementsByClassName("c10")[0]
-        geth11.setAttribute("style","border:2px solid white;height:35px;width:60px;margin-left:20px;background-color:white;color:black;margin-top:20px;border-radius:5px")
-       
-
-        let geth12=document.getElementsByClassName("c11")[0]
-        geth12.setAttribute("style","border:2px solid white;height:35px;width:60px;margin-left:20px;background-color:white;color:black;margin-top:20px;border-radius:5px")
-
-
-        let geth13=document.getElementsByClassName("c12")[0]
-        geth13.setAttribute("style","border:2px solid white;height:35px;width:60px;margin-left:20px;background-color:white;color:blak;margin-top:20px;border-radius:5px")
-        
-
-        let geth14=document.getElementsByClassName("c13")[0]
-        geth14.setAttribute("style","border:2px solid white;height:35px;width:60px;margin-left:20px;background-color:blue;color:white;margin-top:20px;border-radius:5px")
-        
-        let geth15=document.getElementsByClassName("c14")[0]
-        geth15.setAttribute("style","border:2px solid white;height:35px;width:60px;margin-left:20px;background-color:white;color:black;margin-top:20px;border-radius:5px")
-        
-        let geth16=document.getElementsByClassName("c15")[0]
-        geth16.setAttribute("style","border:2px solid white;height:35px;width:60px;margin-left:20px;background-color:white;color:black;margin-top:20px;border-radius:5px")
-      
-        let geth17=document.getElementsByClassName("c16")[0]
-        geth17.setAttribute("style","border:2px solid white;height:35px;width:60px;margin-left:20px;background-color:white;color:black;margin-top:20px;border-radius:5px")
-       
-        let geth18=document.getElementsByClassName("c17")[0]
-        geth18.setAttribute("style","border:2px solid white;height:35px;width:60px;margin-left:20px;background-color:blue;color:white;margin-top:20px;border-radius:5px")
-       
-
-        let geth19=document.getElementsByClassName("c18")[0]
-        geth19.setAttribute("style","border:2px solid white;height:35px;width:60px;margin-left:20px;background-color:white;color:black;margin-top:20px;border-radius:5px")
-        
-
-        let geth20=document.getElementsByClassName("c19")[0]
-        geth20.setAttribute("style","border:2px solid white;height:35px;width:60px;margin-left:20px;background-color:white;color:black;margin-top:20px;border-radius:5px")
-        
-        let geth21=document.getElementsByClassName("c20")[0]
-        geth21.setAttribute("style","border:2px solid white;height:35px;width:60px;margin-left:20px;background-color:white;color:black;margin-top:20px;border-radius:5px")
-        
-
-        let geth22=document.getElementsByClassName("c21")[0]
-        geth22.setAttribute("style","border:2px solid white;height:35px;width:60px;margin-left:20px;background-color:blue;color:white;margin-top:20px;border-radius:5px")
-        
-
-
-       
-
-
-
-        
-
-       
-
-        
-       
-       
-
-
+        window.addEventListener('resize', applyResponsiveStyles);
+        applyResponsiveStyles();
     </script>
 </body>
 </html>
